@@ -82,7 +82,7 @@ docker compose up postgres redis -d
 
 | 变量 | 说明 | 默认值 |
 |------|------|--------|
-| `PUBG_API_KEY` | PUBG API Key（必填） | - |
+| `PUBG_API_KEY` | [Steam PUBG API Key](https://steamcommunity.com/dev/apikey)（必填） | `3CFD8B32...` |
 | `DB_PASSWORD` | 数据库密码 | `pubg123` |
 | `DOMAIN` | 部署域名 | `pubg.plus` |
 
