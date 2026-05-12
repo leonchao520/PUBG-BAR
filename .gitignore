@@ -1,0 +1,9 @@
+node_modules/
+.env
+.output/
+.nuxt/
+dist/
+*.pyc
+__pycache__/
+ssl/
+*.egg-info/
