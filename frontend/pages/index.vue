@@ -7,50 +7,72 @@ const isSearching = ref(false);
 async function handleSearch() {
   if (!searchQuery.value.trim()) return;
   isSearching.value = true;
-  // 页面跳转交给 Nuxt 路由
   await navigateTo(`/player/${searchQuery.value.trim()}`);
 }
+
+// SEO
+useHead({
+  title: "PUBG Plus - 绝地求生数据查询工具",
+  meta: [
+    { name: "description", content: "查询 PUBG 玩家战绩、KD、胜率、赛季数据、比赛记录 — PUBG Plus 非官方数据工具" },
+  ],
+});
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center min-h-[70vh]">
-    <h1 class="text-4xl font-bold mb-4">PUBG Plus</h1>
-    <p class="text-gray-600 mb-8">查询 PUBG 玩家战绩、赛季数据、比赛记录</p>
+  <div class="flex flex-col items-center justify-center min-h-[80vh] px-4">
+    <!-- Hero -->
+    <div class="text-center mb-10">
+      <h1 class="text-5xl md:text-7xl font-black tracking-widest uppercase mb-3">
+        <span class="text-pubg-accent">PUBG</span>
+        <span class="text-white/90"> Plus</span>
+      </h1>
+      <p class="text-pubg-muted text-sm md:text-base tracking-wider uppercase">
+        PUBG 玩家数据 · 实时查询
+      </p>
+    </div>
 
-    <form @submit.prevent="handleSearch" class="w-full max-w-md">
-      <div class="flex gap-2">
+    <!-- 搜索框 -->
+    <form @submit.prevent="handleSearch" class="w-full max-w-xl">
+      <div class="relative group">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="输入玩家昵称..."
-          class="flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          class="w-full px-5 py-4 pr-28 bg-pubg-card border border-pubg-border rounded-lg
+                 text-white placeholder-pubg-muted/50
+                 focus:outline-none focus:border-pubg-accent focus:ring-1 focus:ring-pubg-accent/50
+                 transition-all text-lg"
         />
         <button
           type="submit"
           :disabled="isSearching"
-          class="px-6 py-3 bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-300 disabled:opacity-50"
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 px-6 py-2.5
+                 bg-pubg-accent text-pubg-dark font-bold rounded-md
+                 hover:bg-pubg-accent-hover transition-colors
+                 disabled:opacity-50 uppercase tracking-wider text-sm"
         >
-          {{ isSearching ? "搜索中..." : "查询" }}
+          {{ isSearching ? "..." : "查询" }}
         </button>
       </div>
     </form>
 
-    <!-- SEO 友好内容 -->
-    <section class="mt-16 text-center text-gray-500 max-w-2xl">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">功能介绍</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-4">
-          <h3 class="font-bold text-gray-800 mb-2">玩家数据</h3>
-          <p class="text-sm">查询 KD、胜率、场均伤害等核心数据</p>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-gray-800 mb-2">赛季统计</h3>
-          <p class="text-sm">查看各赛季排名、段位变化趋势</p>
-        </div>
-        <div class="p-4">
-          <h3 class="font-bold text-gray-800 mb-2">比赛记录</h3>
-          <p class="text-sm">回顾最近比赛详情，每局数据全掌握</p>
-        </div>
+    <!-- 功能卡片 -->
+    <section class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
+      <div class="bg-pubg-card border border-pubg-border rounded-lg p-5 text-center hover:border-pubg-accent/30 transition-colors">
+        <div class="text-2xl mb-2">📊</div>
+        <h3 class="font-bold text-white uppercase tracking-wider text-sm mb-1">赛季数据</h3>
+        <p class="text-xs text-pubg-muted">KD / 胜率 / 场均伤害 / 排名</p>
+      </div>
+      <div class="bg-pubg-card border border-pubg-border rounded-lg p-5 text-center hover:border-pubg-accent/30 transition-colors">
+        <div class="text-2xl mb-2">🎯</div>
+        <h3 class="font-bold text-white uppercase tracking-wider text-sm mb-1">比赛记录</h3>
+        <p class="text-xs text-pubg-muted">最近对局 · 击杀详情 · 表现分析</p>
+      </div>
+      <div class="bg-pubg-card border border-pubg-border rounded-lg p-5 text-center hover:border-pubg-accent/30 transition-colors">
+        <div class="text-2xl mb-2">🏆</div>
+        <h3 class="font-bold text-white uppercase tracking-wider text-sm mb-1">排行榜</h3>
+        <p class="text-xs text-pubg-muted">综合排名 · 段位分布 · 趋势</p>
       </div>
     </section>
   </div>

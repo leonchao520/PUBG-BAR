@@ -1,19 +1,41 @@
 <template>
-  <div>
-    <header class="bg-gray-900 text-white p-4">
-      <div class="container mx-auto flex items-center justify-between">
-        <NuxtLink to="/" class="text-xl font-bold">PUBG Plus 🦐</NuxtLink>
-        <nav class="flex gap-4">
-          <NuxtLink to="/search" class="hover:text-yellow-400">玩家查询</NuxtLink>
-          <NuxtLink to="/rankings" class="hover:text-yellow-400">排行榜</NuxtLink>
+  <div class="min-h-screen bg-pubg-dark flex flex-col">
+    <!-- 顶栏 -->
+    <header class="border-b border-pubg-border bg-pubg-card/80 backdrop-blur-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 h-14 flex items-center justify-between">
+        <NuxtLink to="/" class="flex items-center gap-2 font-black text-lg tracking-wider uppercase">
+          <span class="text-pubg-accent">PUBG</span>
+          <span class="text-white/80">Plus</span>
+        </NuxtLink>
+        <nav class="flex items-center gap-1">
+          <NuxtLink
+            to="/search"
+            class="px-3 py-1.5 text-sm text-pubg-muted hover:text-white hover:bg-pubg-border rounded transition-colors"
+          >
+            查询
+          </NuxtLink>
+          <NuxtLink
+            to="/rankings"
+            class="px-3 py-1.5 text-sm text-pubg-muted hover:text-white hover:bg-pubg-border rounded transition-colors"
+          >
+            排行
+          </NuxtLink>
         </nav>
       </div>
     </header>
-    <main class="container mx-auto p-4">
+
+    <!-- 主体 -->
+    <main class="flex-1">
       <NuxtPage />
     </main>
-    <footer class="bg-gray-900 text-white text-center p-4 text-sm text-gray-400">
-      PUBG Plus - 非官方数据工具 | Powered by PUBG API
+
+    <!-- 底栏 -->
+    <footer class="border-t border-pubg-border bg-pubg-card/50 py-4 mt-auto">
+      <div class="container mx-auto px-4 text-center">
+        <p class="text-xs text-pubg-muted/60 tracking-wider uppercase">
+          PUBG Plus · 非官方数据工具 · Powered by PUBG API
+        </p>
+      </div>
     </footer>
   </div>
 </template>

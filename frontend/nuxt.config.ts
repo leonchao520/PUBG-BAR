@@ -17,6 +17,8 @@ export default defineNuxtConfig({
     "/rankings/**": { isr: 3600 },
   },
 
+  css: ["@/assets/css/main.css"],
+
   modules: ["@nuxtjs/tailwindcss"],
 
   // API 代理配置
