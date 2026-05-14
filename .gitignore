@@ -8,3 +8,4 @@ __pycache__/
 ssl/
 *.egg-info/
 echo .venv
+backend/.venv/
