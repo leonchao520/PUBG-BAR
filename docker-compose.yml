@@ -37,7 +37,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - DEV_MODE=${DEV_MODE:-false}
+      - DEV_MODE=${DEV_MODE:-true}
       - DATABASE_URL=postgresql+asyncpg://pubg:${DB_PASSWORD:-pubg123}@postgres:5432/pubg
       - REDIS_URL=redis://redis:6379/0
       - PUBG_API_KEY=${PUBG_API_KEY}

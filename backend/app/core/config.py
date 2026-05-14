@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
@@ -22,9 +23,9 @@ class Settings(BaseSettings):
     rankings_cache_ttl: int = 3600  # 1h - rankings
 
     # Dev mode (no DB/Redis needed)
-    dev_mode: bool = True
+    dev_mode: bool = Field(default=True, alias="DEV_MODE")
 
-    model_config = {"env_file": "../.env", "env_file_encoding": "utf-8", "extra": "ignore"}
+    model_config = {"env_file": "../.env", "env_file_encoding": "utf-8", "extra": "ignore", "populate_by_name": True}
 
 
 settings = Settings()
