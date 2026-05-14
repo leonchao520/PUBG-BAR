@@ -5,7 +5,7 @@
       <div class="container mx-auto px-4 h-14 flex items-center justify-between">
         <NuxtLink to="/" class="flex items-center gap-2 font-black text-lg tracking-wider uppercase">
           <span class="text-pubg-accent">PUBG</span>
-          <span class="text-white/80">Plus</span>
+          <span class="text-white/80">.BAR</span>
         </NuxtLink>
         <nav class="flex items-center gap-1">
           <NuxtLink

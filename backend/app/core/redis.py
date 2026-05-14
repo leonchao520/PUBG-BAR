@@ -1,24 +1,31 @@
-from redis import asyncio as aioredis
-
 from .config import settings
 
-redis_client: aioredis.Redis | None = None
+redis_client = None
 
 
-async def get_redis() -> aioredis.Redis:
-    """FastAPI dependency: get Redis client."""
+async def get_redis():
+    """FastAPI dependency: get Redis client. In dev mode, yield None."""
     global redis_client
+    if settings.dev_mode:
+        yield None
+        return
+
     if redis_client is None:
-        redis_client = aioredis.from_url(
+        from redis import asyncio as aioredis
+
+        _client = aioredis.from_url(
             settings.redis_url,
             decode_responses=True,
         )
-    return redis_client
+        # store in a non-None attribute
+        globals()["_redis"] = _client
+        yield _client
+    else:
+        yield redis_client
 
 
 async def close_redis():
     """Close Redis connection on shutdown."""
-    global redis_client
-    if redis_client:
-        await redis_client.close()
-        redis_client = None
+    _client = globals().get("_redis")
+    if _client:
+        await _client.close()

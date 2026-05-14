@@ -1,27 +1,28 @@
 services:
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - nuxt
-      - api
-    restart: unless-stopped
-    networks:
-      - app-net
+  # nginx:  # 生产环境再启用，需要 SSL 证书
+  #   image: nginx:alpine
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - nuxt
+  #     - api
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-net
 
   nuxt:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
     environment:
       - NUXT_PUBLIC_API_BASE=http://api:8000
-    expose:
-      - "3000"
+      - NUXT_PUBLIC_DEV_MODE=true
     restart: unless-stopped
     networks:
       - app-net
@@ -31,10 +32,13 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
+      - DEV_MODE=true
       - DATABASE_URL=postgresql+asyncpg://pubg:${DB_PASSWORD:-pubg123}@postgres:5432/pubg
       - REDIS_URL=redis://redis:6379/0
       - PUBG_API_KEY=${PUBG_API_KEY}
       - CORS_ORIGINS=http://nuxt:3000,https://${DOMAIN:-pubg.plus}
+    ports:
+      - "8000:8000"
     expose:
       - "8000"
     depends_on:

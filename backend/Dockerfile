@@ -1,26 +1,17 @@
-# 构建阶段
-FROM python:3.12-slim AS builder
-
-WORKDIR /app
-
-COPY pyproject.toml .
-RUN pip install --no-cache-dir .
-
-COPY . .
-RUN pip install --no-cache-dir .
-
-# 运行阶段
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# 运行时依赖
+# 安装系统依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev \
+    libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
+# 安装 Python 依赖
+COPY pyproject.toml .
+RUN pip install --no-cache-dir fastapi uvicorn sqlalchemy pydantic pydantic-settings httpx python-dotenv redis
+
+# 复制代码
 COPY app /app/app
 
 EXPOSE 8000

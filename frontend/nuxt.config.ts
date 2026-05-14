@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   // API 代理配置
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || "http://localhost:8000",
+      apiBase: "http://localhost:8000",
     },
   },
 
@@ -42,10 +42,10 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-8",
       viewport: "width=device-width, initial-scale=1",
-      title: "PUBG Plus - 绝地求生数据工具",
+      title: "PUBG.BAR - 玩家查询工具",
       meta: [
-        { name: "description", content: "查询 PUBG 玩家数据、战绩、赛季统计" },
-        { name: "keywords", content: "PUBG, 绝地求生, 战绩查询, 数据统计" },
+        { name: "description", content: "查询 PUBG 玩家数据、战绩、赛季统计、封号查询、封禁查询" },
+        { name: "keywords", content: "PUBG, 绝地求生, 战绩查询, 数据统计、封号查询" },
       ],
     },
   },
