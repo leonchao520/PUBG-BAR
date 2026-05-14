@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: str = "http://localhost:3000"
 
+    # Steam API
+    steam_api_key: str = ""
+
     # Cache TTL (seconds)
     player_cache_ttl: int = 900  # 15 min - player profile
     season_cache_ttl: int = 1800  # 30 min - season stats

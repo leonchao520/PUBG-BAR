@@ -41,6 +41,7 @@ services:
       - DATABASE_URL=postgresql+asyncpg://pubg:${DB_PASSWORD:-pubg123}@postgres:5432/pubg
       - REDIS_URL=redis://redis:6379/0
       - PUBG_API_KEY=${PUBG_API_KEY}
+      - STEAM_API_KEY=${STEAM_API_KEY}
       - CORS_ORIGINS=http://nuxt:3000,http://localhost:3000,https://${DOMAIN:-pubg.plus}
     ports:
       - "8000:8000"
