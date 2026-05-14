@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Environments
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+.nuxt/
+.output/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

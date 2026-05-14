@@ -1,19 +1,24 @@
 services:
-  # nginx:  # 生产环境再启用，需要 SSL 证书
-  #   image: nginx:alpine
-  #   ports:
-  #     - "443:443"
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-  #     - ./ssl:/etc/nginx/ssl:ro
-  #   depends_on:
-  #     - nuxt
-  #     - api
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-net
+  # Nginx 反代（生产环境需配置 SSL）
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - nginx-cache:/var/cache/nginx
+    depends_on:
+      nuxt:
+        condition: service_started
+      api:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - app-net
 
+  # Nuxt 前端（SSR + ISR）
   nuxt:
     build:
       context: ./frontend
@@ -22,21 +27,21 @@ services:
       - "3000:3000"
     environment:
       - NUXT_PUBLIC_API_BASE=http://api:8000
-      - NUXT_PUBLIC_DEV_MODE=true
     restart: unless-stopped
     networks:
       - app-net
 
+  # FastAPI 后端
   api:
     build:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - DEV_MODE=true
+      - DEV_MODE=${DEV_MODE:-false}
       - DATABASE_URL=postgresql+asyncpg://pubg:${DB_PASSWORD:-pubg123}@postgres:5432/pubg
       - REDIS_URL=redis://redis:6379/0
       - PUBG_API_KEY=${PUBG_API_KEY}
-      - CORS_ORIGINS=http://nuxt:3000,https://${DOMAIN:-pubg.plus}
+      - CORS_ORIGINS=http://nuxt:3000,http://localhost:3000,https://${DOMAIN:-pubg.plus}
     ports:
       - "8000:8000"
     expose:
@@ -50,8 +55,10 @@ services:
     networks:
       - app-net
 
+  # Redis 缓存
   redis:
     image: redis:7-alpine
+    command: redis-server --appendonly yes --lazyfree-lazy-eviction yes
     volumes:
       - redis-data:/data
     expose:
@@ -60,6 +67,7 @@ services:
     networks:
       - app-net
 
+  # PostgreSQL 数据库
   postgres:
     image: postgres:16-alpine
     volumes:
@@ -77,11 +85,14 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pubg -d pubg"]
       interval: 5s
+      timeout: 3s
       retries: 5
+      start_period: 10s
 
 volumes:
   pg-data:
   redis-data:
+  nginx-cache:
 
 networks:
   app-net:

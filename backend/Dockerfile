@@ -1,15 +1,16 @@
-FROM python:3.12-slim
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-# 安装系统依赖
+# 系统依赖（编译 wheels）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # 安装 Python 依赖
 COPY pyproject.toml .
-RUN pip install --no-cache-dir fastapi uvicorn sqlalchemy pydantic pydantic-settings httpx python-dotenv redis
+RUN pip install --no-cache-dir . && \
+    pip install --no-cache-dir asyncpg
 
 # 复制代码
 COPY app /app/app
